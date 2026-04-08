@@ -95,3 +95,23 @@ export async function sendChatTranscript({ name, email, subject, agentName, mess
     html: baseTemplate(content),
   })
 }
+export async function sendChatStarted({ name, email, subject, agentName, chatStatus }: {
+  name: string; email: string; subject: string; agentName: string | null; chatStatus: string
+}) {
+  const content = `
+    <h2 style="font-size:20px;font-weight:700;color:#0f172a;margin:0 0 8px;">Live Chat Started</h2>
+    <p style="font-size:14px;color:#475569;margin:0 0 24px;">Hello ${name}, your live chat session has been started.</p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:20px;">
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:4px;">Subject</div>
+      <div style="font-size:14px;font-weight:600;color:#0f172a;">${subject}</div>
+      <div style="font-size:13px;color:#94a3b8;margin-top:10px;margin-bottom:4px;">Status</div>
+      <div style="font-size:14px;color:#0f172a;">${chatStatus === "ACTIVE" ? `Connected with agent: <strong>${agentName}</strong>` : "In queue - an agent will join shortly"}</div>
+    </div>
+    <p style="font-size:13px;color:#475569;margin-bottom:20px;">Please return to the portal to continue your chat session.</p>
+    <a href="${PORTAL_URL}/support/chat" style="display:block;text-align:center;background:#059669;color:#fff;padding:12px 24px;border-radius:9px;font-size:14px;font-weight:600;text-decoration:none;">Return to Chat</a>`
+  await transporter.sendMail({
+    from: FROM, to: email,
+    subject: `Live Chat Started: ${subject} - IMARAT IT Support`,
+    html: baseTemplate(content),
+  })
+}
