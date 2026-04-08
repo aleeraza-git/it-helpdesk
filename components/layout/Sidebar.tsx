@@ -94,7 +94,7 @@ export default function Sidebar({ unreadCount = 0, theme, onToggleTheme }: { unr
       {/* Navigation */}
       <nav style={{ flex: 1, padding: '10px 8px', overflowY: 'auto', overflowX: 'hidden' }}>
         {items.map(item => {
-          const active = isActive(item.href, item.exact)
+          const active = isActive(item.href, (item as any).exact)
           return (
             <button key={item.href} onClick={() => router.push(item.href)}
               title={collapsed ? item.label : undefined}
@@ -141,3 +141,5 @@ export default function Sidebar({ unreadCount = 0, theme, onToggleTheme }: { unr
     </aside>
   )
 }
+
+

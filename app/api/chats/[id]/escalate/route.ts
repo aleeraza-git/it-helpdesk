@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const { user } = auth
   const chat = await prisma.chat.findUnique({
     where: { id: params.id },
-    include: { internalNotes: true },
+    include: { internalNotes: true, ticket: true },
   })
   if (!chat) return NextResponse.json({ error: 'Chat not found' }, { status: 404 })
   if (chat.ticket) return NextResponse.json({ error: 'Ticket already exists for this chat' }, { status: 409 })

@@ -77,7 +77,7 @@ export default function UsersPage() {
         <div style={{ display: 'flex', gap: 4 }}>
           {[['all', `All (${roleCounts.ALL})`], ['USER', `Users (${roleCounts.USER})`], ['AGENT', `Agents (${roleCounts.AGENT})`], ['MANAGER', `Managers (${roleCounts.MANAGER})`]].map(([v, l]) => (
             <button key={v} onClick={() => setRoleFilter(v)}
-              style={{ padding: '7px 14px', borderRadius: 7, fontSize: 12, fontWeight: 500, border: 'none', cursor: 'pointer', background: roleFilter === v ? 'var(--accent)' : 'var(--surface)', color: roleFilter === v ? '#fff' : 'var(--text2)', border: `1px solid ${roleFilter === v ? 'var(--accent)' : 'var(--border)'}` }}>
+              style={{ padding: '7px 14px', borderRadius: 7, fontSize: 12, fontWeight: 500, cursor: 'pointer', background: roleFilter === v ? 'var(--accent)' : 'var(--surface)', color: roleFilter === v ? '#fff' : 'var(--text2)', border: `1px solid ${roleFilter === v ? 'var(--accent)' : 'var(--border)'}` }}>
               {l}
             </button>
           ))}
@@ -181,7 +181,7 @@ export default function UsersPage() {
               </Select>
               <Input label="Department" value={editForm.department} onChange={e => setEditForm({ ...editForm, department: e.target.value })} />
               <Input label="Max Concurrent Chats" value={editForm.maxChats} onChange={e => setEditForm({ ...editForm, maxChats: parseInt(e.target.value) || 5 })} type="number" min={1} max={20} />
-              <Input label="Skills (comma separated)" value={typeof editForm.skills === 'string' ? editForm.skills : editForm.skills.join(', ')} onChange={e => setEditForm({ ...editForm, skills: e.target.value })} />
+              <Input label="Skills (comma separated)" value={typeof editForm.skills === 'string' ? editForm.skills : (editForm.skills as string[]).join(', ')} onChange={e => setEditForm({ ...editForm, skills: e.target.value })} />
               <Select label="Status" value={editUser.status} onChange={e => { setEditUser({ ...editUser, status: e.target.value as any }) }}>
                 {['ONLINE', 'BUSY', 'AWAY', 'OFFLINE'].map(s => <option key={s} value={s}>{s}</option>)}
               </Select>
@@ -196,3 +196,6 @@ export default function UsersPage() {
     </div>
   )
 }
+
+
+

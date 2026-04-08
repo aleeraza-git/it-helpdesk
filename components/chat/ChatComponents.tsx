@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useAPI } from '@/hooks/useAPI'
-import { Avatar, Badge, PriorityBadge, Button, Spinner, formatTime, formatDateTime } from '@/components/ui'
+import { Avatar, Badge, PriorityBadge, Btn, Spinner, formatTime, formatDateTime } from '@/components/ui'
 import { Chat, Message, User, QuickReply, InternalNote } from '@/types'
 
 // Icons
@@ -144,13 +144,13 @@ export function ChatInput({
         <div style={{ borderBottom: '1px solid var(--border)', maxHeight: 220, overflowY: 'auto' }}>
           <div style={{ padding: '8px 12px 4px', fontSize: 11, fontWeight: 600, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Quick Replies</div>
           {quickReplies.map(qr => (
-            <button key={qr.id} onClick={() => useQuickReply(qr)}
+            <Btn key={qr.id} onClick={() => useQuickReply(qr)}
               style={{ width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', borderBottom: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text2)' }}
               onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'none')}>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>{qr.title}</div>
               <div style={{ fontSize: 12, color: 'var(--text3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{qr.text}</div>
-            </button>
+            </Btn>
           ))}
         </div>
       )}
@@ -159,22 +159,22 @@ export function ChatInput({
         <input ref={fileRef} type="file" style={{ display: 'none' }} onChange={handleFile} accept="image/*,.pdf,.doc,.docx,.txt,.log" />
 
         {showQuickReplies && (
-          <button onClick={() => setShowQR(v => !v)} title="Quick Replies"
+          <Btn onClick={() => setShowQR(v => !v)} title="Quick Replies"
             style={{ padding: 8, background: showQR ? 'var(--accent-light)' : 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, color: showQR ? '#3b82f6' : 'var(--text3)', cursor: 'pointer', flexShrink: 0 }}>
             <Icon name="queue" size={16} />
-          </button>
+          </Btn>
         )}
 
-        <button onClick={() => fileRef.current?.click()} title="Attach file"
+        <Btn onClick={() => fileRef.current?.click()} title="Attach file"
           style={{ padding: 8, background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text3)', cursor: 'pointer', flexShrink: 0 }}>
           <Icon name="attach" size={16} />
-        </button>
+        </Btn>
 
         {onAIRequest && (
-          <button onClick={onAIRequest} disabled={loadingAI} title="AI suggested reply"
+          <Btn onClick={onAIRequest} disabled={loadingAI} title="AI suggested reply"
             style={{ padding: 8, background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, color: '#8b5cf6', cursor: 'pointer', flexShrink: 0, opacity: loadingAI ? 0.6 : 1 }}>
             {loadingAI ? <Spinner size={16} /> : <Icon name="robot" size={16} color="#8b5cf6" />}
-          </button>
+          </Btn>
         )}
 
         <textarea ref={textRef} value={text} onChange={e => setText(e.target.value)}
@@ -186,10 +186,10 @@ export function ChatInput({
           onFocus={e => { e.currentTarget.style.borderColor = '#3b82f6' }}
           onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)' }} />
 
-        <button onClick={handleSend} disabled={!text.trim() || sending || disabled}
+        <Btn onClick={handleSend} disabled={!text.trim() || sending || disabled}
           style={{ width: 40, height: 40, borderRadius: 10, background: text.trim() && !disabled ? '#3b82f6' : 'var(--surface2)', border: '1px solid var(--border)', color: text.trim() && !disabled ? '#fff' : 'var(--text3)', cursor: text.trim() && !disabled ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
           {sending ? <Spinner size={14} /> : <Icon name="send" size={15} />}
-        </button>
+        </Btn>
       </div>
     </div>
   )
@@ -205,8 +205,8 @@ export function AISuggestionPanel({ suggestion, onUse, onDismiss }: { suggestion
       </div>
       <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.6, marginBottom: 10 }}>{suggestion}</div>
       <div style={{ display: 'flex', gap: 8 }}>
-        <Button onClick={() => onUse(suggestion)} size="sm" variant="primary">Use this reply</Button>
-        <Button onClick={onDismiss} size="sm" variant="ghost">Dismiss</Button>
+        <Btn onClick={() => onUse(suggestion)} size="sm" variant="primary">Use this reply</Btn>
+        <Btn onClick={onDismiss} size="sm" variant="ghost">Dismiss</Btn>
       </div>
     </div>
   )
@@ -247,9 +247,9 @@ export function InternalNotesPanel({ notes, onAdd, agentId }: { notes: InternalN
       <div style={{ padding: 12, borderTop: '1px solid var(--border)' }}>
         <textarea value={text} onChange={e => setText(e.target.value)} placeholder="Add internal note (not visible to user)…"
           rows={3} style={{ width: '100%', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px', color: 'var(--text)', fontSize: 12, outline: 'none', fontFamily: 'inherit', resize: 'none' }} />
-        <Button onClick={handleAdd} disabled={!text.trim() || saving} size="sm" variant="ghost" style={{ width: '100%', marginTop: 8 }}>
+        <Btn onClick={handleAdd} disabled={!text.trim() || saving} size="sm" variant="ghost" style={{ width: '100%', marginTop: 8 }}>
           {saving ? <Spinner size={12} /> : 'Add Note'}
-        </Button>
+        </Btn>
       </div>
     </div>
   )
@@ -283,38 +283,38 @@ export function ChatHeader({
       <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
         {showAgentControls && (
           <>
-            <button onClick={onToggleNotes} title="Internal Notes"
+            <Btn onClick={onToggleNotes} title="Internal Notes"
               style={{ padding: '6px 10px', background: notesOpen ? 'rgba(245,158,11,0.15)' : 'var(--surface2)', border: `1px solid ${notesOpen ? '#f59e0b' : 'var(--border)'}`, borderRadius: 7, color: notesOpen ? '#f59e0b' : 'var(--text3)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
               <Icon name="note" size={14} />
               Notes
-            </button>
-            <button onClick={onEscalate} title="Create ticket"
+            </Btn>
+            <Btn onClick={onEscalate} title="Create ticket"
               style={{ padding: '6px 10px', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 7, color: '#f59e0b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
               <Icon name="escalate" size={14} />
               Ticket
-            </button>
+            </Btn>
             {chat.status === 'ACTIVE' && (
-              <button onClick={onResolve}
+              <Btn onClick={onResolve}
                 style={{ padding: '6px 12px', background: 'rgba(16,185,129,0.15)', border: '1px solid #10b981', borderRadius: 7, color: '#10b981', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600 }}>
                 <Icon name="resolve" size={14} color="#10b981" />
                 Resolve
-              </button>
+              </Btn>
             )}
           </>
         )}
         {showManagerControls && (
-          <button onClick={onAssign}
+          <Btn onClick={onAssign}
             style={{ padding: '6px 12px', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 7, color: 'var(--text2)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
             <Icon name="pencil" size={14} />
             Reassign
-          </button>
+          </Btn>
         )}
         {!showAgentControls && !showManagerControls && chat.status === 'ACTIVE' && (
-          <button onClick={onEscalate}
+          <Btn onClick={onEscalate}
             style={{ padding: '6px 12px', background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 7, color: '#f59e0b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
             <Icon name="escalate" size={14} />
             Create Ticket
-          </button>
+          </Btn>
         )}
       </div>
     </div>
@@ -350,3 +350,5 @@ export function ResolvedBanner({ resolution, resolvedAt }: { resolution?: string
     </div>
   )
 }
+
+
