@@ -1,43 +1,44 @@
 {
-    "name": "imarat-it-support",
-    "version": "1.0.0",
-    "description": "IMARAT IT Support Portal - Full Stack",
-    "main": "server/index.js",
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        "seed": "ts-node --project tsconfig.json lib/seed/seed.ts",
-        "db:generate": "npx prisma generate",
-        "db:migrate": "npx prisma migrate dev",
-        "db:push": "npx prisma db push",
-        "db:studio": "npx prisma studio"
-    },
-    "dependencies": {
-        "@anthropic-ai/sdk": "^0.82.0",
-        "@prisma/client": "^5.22.0",
-        "@types/node": "^25.5.2",
-        "@types/react": "^19.2.14",
-        "@types/react-dom": "^19.2.3",
-        "bcryptjs": "^2.4.3",
-        "date-fns": "^4.1.0",
-        "jsonwebtoken": "^9.0.3",
-        "lucide-react": "^1.7.0",
-        "next": "^14.2.35",
-        "next-auth": "^4.24.13",
-        "prisma": "^5.22.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "recharts": "^3.8.1",
-        "socket.io": "^4.8.3",
-        "socket.io-client": "^4.8.3",
-        "typescript": "^6.0.2",
-        "uuid": "^9.0.1"
-    },
-    "devDependencies": {
-        "@types/bcryptjs": "^2.4.6",
-        "@types/jsonwebtoken": "^9.0.10",
-        "@types/uuid": "^10.0.0"
-    }
+    "name":  "imarat-it-support",
+    "version":  "1.0.0",
+    "description":  "IMARAT IT Support Portal - Full Stack",
+    "main":  "server/index.js",
+    "scripts":  {
+                    "dev":  "next dev",
+                    "build":  "next build",
+                    "start":  "next start",
+                    "lint":  "next lint",
+                    "seed":  "ts-node --project tsconfig.json lib/seed/seed.ts",
+                    "db:generate":  "npx prisma generate",
+                    "db:migrate":  "npx prisma migrate dev",
+                    "db:push":  "npx prisma db push",
+                    "db:studio":  "npx prisma studio",
+                    "postinstall":  "prisma generate"
+                },
+    "dependencies":  {
+                         "@anthropic-ai/sdk":  "^0.82.0",
+                         "@prisma/client":  "^5.22.0",
+                         "@types/node":  "^25.5.2",
+                         "@types/react":  "^19.2.14",
+                         "@types/react-dom":  "^19.2.3",
+                         "bcryptjs":  "^2.4.3",
+                         "date-fns":  "^4.1.0",
+                         "jsonwebtoken":  "^9.0.3",
+                         "lucide-react":  "^1.7.0",
+                         "next":  "^14.2.35",
+                         "next-auth":  "^4.24.13",
+                         "prisma":  "^5.22.0",
+                         "react":  "^18.3.1",
+                         "react-dom":  "^18.3.1",
+                         "recharts":  "^3.8.1",
+                         "socket.io":  "^4.8.3",
+                         "socket.io-client":  "^4.8.3",
+                         "typescript":  "^6.0.2",
+                         "uuid":  "^9.0.1"
+                     },
+    "devDependencies":  {
+                            "@types/bcryptjs":  "^2.4.6",
+                            "@types/jsonwebtoken":  "^9.0.10",
+                            "@types/uuid":  "^10.0.0"
+                        }
 }
