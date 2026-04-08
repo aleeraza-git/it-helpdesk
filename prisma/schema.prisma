@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
+  avatar        String?
+  department    String?
+  status        UserStatus @default(OFFLINE)
+  skills        String[]
+  maxChats      Int       @default(5)
+  isActive      Boolean   @default(true)
+  lastSeen      DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  chatsAsUser   Chat[]    @relation("UserChats")
+  chatsAsAgent  Chat[]    @relation("AgentChats")
+  messages      Message[]
+  ticketsAsUser Ticket[]  @relation("UserTickets")
+  ticketsAsAgent Ticket[] @relation("AgentTickets")
+  comments      TicketComment[]
+  internalNotes InternalNote[]
+  notifications Notification[]
+  kbArticles    KBArticle[]
+  auditLogs     AuditLog[]
+  sessions      Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("sessions")
+}
+
+model Chat {
+  id            String     @id @default(cuid())
+  subject       String
+  status        ChatStatus @default(QUEUED)
+  priority      Priority   @default(MEDIUM)
+  category      String     @default("general")
+  tags          String[]
+  queuePosition Int?
+  rating        Int?
+  resolution    String?
+  resolvedAt    DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  userId   String
+  agentId  String?
+  user     User    @relation("UserChats", fields: [userId], references: [id])
+  agent    User?   @relation("AgentChats", fields: [agentId], references: [id])
+
+  messages      Message[]
+  internalNotes InternalNote[]
+  ticket        Ticket?
+  auditLogs     AuditLog[]
+
+  @@map("chats")
+}
+
+model Message {
+  id         String      @id @default(cuid())
+  text       String
+  type       MessageType @default(TEXT)
+  fileUrl    String?
+  fileName   String?
+  fileSize   Int?
+  isRead     Boolean     @default(false)
+  readAt     DateTime?
+  createdAt  DateTime    @default(now())
+
+  chatId   String
+  senderId String
+  chat     Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender   User   @relation(fields: [senderId], references: [id])
+
+  @@map("messages")
+}
+
+model InternalNote {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+
+  chatId  String
+  agentId String
+  chat    Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  agent   User   @relation(fields: [agentId], references: [id])
+
+  @@map("internal_notes")
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  subject     String
+  description String
+  status      TicketStatus @default(OPEN)
+  priority    Priority     @default(MEDIUM)
+  category    String       @default("general")
+  tags        String[]
+  dueDate     DateTime?
+  resolution  String?
+  resolvedAt  DateTime?
+  slaBreached Boolean      @default(false)
+  slaResponse Float?
+  slaResolution Float?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  userId  String
+  agentId String?
+  chatId  String?  @unique
+  user    User     @relation("UserTickets", fields: [userId], references: [id])
+  agent   User?    @relation("AgentTickets", fields: [agentId], references: [id])
+  chat    Chat?    @relation(fields: [chatId], references: [id])
+
+  comments  TicketComment[]
+  auditLogs AuditLog[]
+
+  @@map("tickets")
+}
+
+model TicketComment {
+  id         String   @id @default(cuid())
+  text       String
+  isInternal Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  ticketId String
+  userId   String
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@map("ticket_comments")
+}
+
+model KBArticle {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  category  String
+  tags      String[]
+  views     Int      @default(0)
+  helpful   Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  @@map("kb_articles")
+}
+
+model QuickReply {
+  id       String @id @default(cuid())
+  title    String
+  text     String
+  category String @default("general")
+
+  @@map("quick_replies")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  text      String
+  isRead    Boolean          @default(false)
+  chatId    String?
+  ticketId  String?
+  createdAt DateTime         @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model SystemSettings {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("system_settings")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String
+  oldValue  String?
+  newValue  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  userId   String
+  user     User    @relation(fields: [userId], references: [id])
+  chatId   String?
+  ticketId String?
+  chat     Chat?   @relation(fields: [chatId], references: [id])
+  ticket   Ticket? @relation(fields: [ticketId], references: [id])
+
+  @@map("audit_logs")
+}
+
+enum Role {
+  USER
+  AGENT
+  MANAGER
+  ADMIN
+}
+
+enum UserStatus {
+  ONLINE
+  BUSY
+  AWAY
+  OFFLINE
+}
+
+enum ChatStatus {
+  QUEUED
+  ACTIVE
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING
+  RESOLVED
+  CLOSED
+}
+
+enum MessageType {
+  TEXT
+  FILE
+  SYSTEM
+  AI_SUGGESTION
+}
+
+enum NotificationType {
+  NEW_CHAT
+  CHAT_ASSIGNED
+  NEW_MESSAGE
+  CHAT_RESOLVED
+  TICKET_CREATED
+  TICKET_UPDATED
+  TICKET_ASSIGNED
+  SYSTEM
+}

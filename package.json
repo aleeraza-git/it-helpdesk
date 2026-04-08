@@ -1,0 +1,39 @@
+{
+  "name": "imarat-it-support",
+  "version": "1.0.0",
+  "description": "IMARAT IT Support Portal - Full Stack",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "seed": "ts-node --project tsconfig.json lib/seed/seed.ts",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:push": "npx prisma db push",
+    "db:studio": "npx prisma studio"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
+    "@prisma/client": "^7.6.0",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.3",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.7.0",
+    "multer": "^1.4.5-lts.1",
+    "next-auth": "^4.24.13",
+    "prisma": "^7.6.0",
+    "recharts": "^3.8.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "uuid": "^9.0.1",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/uuid": "^10.0.0"
+  }
+}
